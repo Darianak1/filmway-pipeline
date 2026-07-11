@@ -76,6 +76,18 @@
   .search svg{position:absolute;left:14px;top:50%;transform:translateY(-50%);opacity:.6}
   .search-hint{font-family:var(--mono);font-size:11px;letter-spacing:.03em;color:rgba(255,255,255,.75);margin-top:8px}
 
+  .search-answers{display:none;flex-direction:column;gap:10px;margin-top:16px;max-width:620px}
+  .search-answers.show{display:flex}
+  .answer-card{background:var(--white);color:var(--ink);border-radius:var(--radius-sm);padding:16px 18px}
+  .answer-card .a-q{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700;margin-bottom:8px}
+  .answer-card .a-text{font-size:13.5px;line-height:1.55;margin-bottom:12px}
+  .answer-card .a-link{
+    display:inline-flex;align-items:center;gap:8px;cursor:pointer;background:var(--black);color:var(--white);
+    border:none;border-radius:var(--radius-sm);padding:9px 14px;font-family:var(--mono);font-size:12px;font-weight:600;
+  }
+  .answer-card .a-link:hover{background:var(--red)}
+  .answer-card .a-link .a-time{font-family:var(--mono);opacity:.75}
+
   /* ============ MAIN (black) ============ */
   .main{background:var(--black);padding:clamp(28px,5vw,48px) clamp(18px,4vw,56px) 10px}
 
@@ -272,6 +284,7 @@
       <input id="search" placeholder="как сделать нормальную кожу?" autocomplete="off">
     </div>
     <div class="search-hint">ДЕМО-ПОИСК ПО СМЫСЛУ: «КОЖА» · «ВИДЕО ИЗ ФОТО» · «УБРАТЬ ФОН» · «РАСКАДРОВКА»</div>
+    <div class="search-answers" id="searchAnswers"></div>
   </div>
 
   <div class="main">
@@ -433,6 +446,18 @@ const DATA = [
     lessons:[], tools:{t1:[],t2:[],t3:[]} },
 ];
 
+/* ---------- ОТВЕТЫ ПОИСКА (вопрос → текст + урок с таймкодом) ---------- */
+/* seek — секунда в видео, с которой открыть урок. Пополняется по мере поступления контента. */
+const ANSWERS = [
+  {
+    keywords:["кожа","skin","улучшить кожу","качество кожи","изменить кожу","ретушь кожи","нормальную кожу"],
+    answer:"Заглушка ответа: здесь появится инструкция, как улучшить качество кожи в кадре.",
+    stageId:"enhance",
+    lessonIdx:0,
+    seek:0
+  }
+];
+
 /* реальные досье инструментов (заполняются по мере поступления контента) */
 const TOOL_INFO = {
   "NANO BANANA LITE": {
@@ -524,6 +549,7 @@ const detailInner = document.getElementById('detailInner');
 const progressText = document.getElementById('progressText');
 const progressFill = document.getElementById('progressFill');
 const searchEmpty = document.getElementById('searchEmpty');
+const searchAnswers = document.getElementById('searchAnswers');
 let activeId = null;
 let suppressHash = false;
 
@@ -751,9 +777,12 @@ function openTool(name){
     </div>`);
 }
 
-function openVideo(title,people,videoId){
+function openVideo(title,people,videoId,seek){
+  const src = seek
+    ? `https://kinescope.io/embed/${videoId}?seek=${Math.round(seek)}&autoplay=1`
+    : `https://kinescope.io/embed/${videoId}`;
   const player = videoId
-    ? `<div class="video-embed"><iframe src="https://kinescope.io/embed/${videoId}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`
+    ? `<div class="video-embed"><iframe src="${src}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div>`
     : `<div class="video-mock">
         <div class="pbtn"><svg width="22" height="22" viewBox="0 0 24 24" fill="#111"><path d="M8 5v14l11-7z"/></svg></div>
       </div>
@@ -801,6 +830,41 @@ function highlightMatch(text, words){
   return out;
 }
 
+/* ---------- ОТВЕТЫ ПОИСКА: рендер + открытие урока с таймкодом ---------- */
+function fmtTime(sec){
+  sec = Math.max(0, Math.round(sec||0));
+  const m = Math.floor(sec/60), s = sec%60;
+  return `${m}:${String(s).padStart(2,'0')}`;
+}
+
+function renderAnswers(words){
+  const matches = ANSWERS
+    .filter(a => words.some(w => a.keywords.some(k => k.includes(w) || w.includes(k))))
+    .map(a => ({ a, s: DATA.find(x=>x.id===a.stageId) }))
+    .filter(({a,s}) => s && s.lessons[a.lessonIdx]);
+  if(!matches.length){
+    searchAnswers.classList.remove('show');
+    searchAnswers.innerHTML = '';
+    return;
+  }
+  searchAnswers.innerHTML = matches.map(({a,s})=>{
+    const l = s.lessons[a.lessonIdx];
+    return `<div class="answer-card">
+      <div class="a-q">${s.title} · ${l.title}</div>
+      <p class="a-text">${a.answer}</p>
+      <button class="a-link" onclick="openAnswerVideo('${a.stageId}',${a.lessonIdx},${a.seek})">▶ Открыть урок <span class="a-time">${fmtTime(a.seek)}</span></button>
+    </div>`;
+  }).join('');
+  searchAnswers.classList.add('show');
+}
+
+function openAnswerVideo(stageId, lessonIdx, seek){
+  const s = DATA.find(x=>x.id===stageId);
+  const l = s && s.lessons[lessonIdx];
+  if(!l) return;
+  openVideo(l.title, l.people, l.video||'', seek);
+}
+
 const search = document.getElementById('search');
 search.addEventListener('input',()=>{
   const q = search.value.trim().toLowerCase();
@@ -812,6 +876,7 @@ search.addEventListener('input',()=>{
       el.querySelector('.stage-title').innerHTML = DATA.find(x=>x.id===el.dataset.id).title;
     });
     searchEmpty.classList.remove('show');
+    renderAnswers([]);
     return;
   }
   let firstHit=null;
@@ -826,6 +891,7 @@ search.addEventListener('input',()=>{
   });
   searchEmpty.classList.toggle('show', !firstHit);
   if(firstHit) selectStage(firstHit,{updateHash:true});
+  renderAnswers(words);
 });
 
 /* ---------- DEEP-LINK (URL hash) ---------- */
