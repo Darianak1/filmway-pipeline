@@ -135,13 +135,13 @@
   .detail-inner.swap{animation:swapIn .22s ease}
   @keyframes swapIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
   .important-note{
-    background:var(--red);color:var(--white);border-radius:var(--radius-sm);
+    background:var(--paper);color:var(--ink);border:2px solid var(--red);border-radius:var(--radius-sm);
     padding:16px 20px;margin-bottom:20px;font-size:15px;line-height:1.6;
   }
-  .important-note b{font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:8px}
+  .important-note b{font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:8px;color:var(--red)}
   .important-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
-  .important-list li{padding-left:18px;position:relative}
-  .important-list li::before{content:"—";position:absolute;left:0;opacity:.75}
+  .important-list li{padding-left:18px;position:relative;color:var(--ink)}
+  .important-list li::before{content:"—";position:absolute;left:0;color:var(--red)}
   .detail-head{display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
   .detail-head .dot{width:10px;height:10px;background:var(--red);flex:0 0 auto;border-radius:50%}
   .detail-head h2{margin:0;font-family:var(--display);text-transform:uppercase;font-size:clamp(24px,4vw,34px);letter-spacing:-.01em}
