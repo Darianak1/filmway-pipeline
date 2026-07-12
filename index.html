@@ -146,8 +146,9 @@
   .detail-head .dot{width:10px;height:10px;background:var(--red);flex:0 0 auto;border-radius:50%}
   .detail-head h2{margin:0;font-family:var(--display);text-transform:uppercase;font-size:clamp(24px,4vw,34px);letter-spacing:-.01em}
   .detail-desc{color:var(--ink);opacity:.75;font-size:14px;line-height:1.6;margin:8px 0 26px;max-width:680px}
-  .cols{display:grid;grid-template-columns:1fr 1.15fr;gap:32px}
-  @media(max-width:820px){.cols{grid-template-columns:1fr}}
+  .detail-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:32px;align-items:start}
+  @media(max-width:820px){.detail-grid{grid-template-columns:1fr}}
+  .detail-right{padding-top:2px}
   .col-title{display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink);font-weight:700;margin-bottom:16px}
   .col-title .bar{width:26px;height:2px;background:var(--red);border-radius:999px}
   .col-tools .col-title{justify-content:center}
@@ -679,14 +680,14 @@ function selectStage(id, opts){
 
   detailInner.innerHTML = `
     ${importantHtml}
-    <div class="detail-head"><span class="dot"></span><h2>${s.title}</h2></div>
-    <p class="detail-desc">${s.desc}</p>
-    <div class="cols">
-      <div>
+    <div class="detail-grid">
+      <div class="detail-left">
+        <div class="detail-head"><span class="dot"></span><h2>${s.title}</h2></div>
+        <p class="detail-desc">${s.desc}</p>
         <div class="col-title"><span class="bar"></span>Уроки</div>
         ${lessonsHtml}
       </div>
-      <div class="col-tools">
+      <div class="detail-right col-tools">
         <div class="col-title"><span class="bar"></span>Инструменты</div>
         ${toolsHtml}
       </div>
