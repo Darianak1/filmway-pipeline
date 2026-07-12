@@ -134,6 +134,11 @@
   .detail-inner{background:var(--paper);color:var(--ink);padding:clamp(20px,4vw,32px);border:1px solid var(--black);border-radius:var(--radius)}
   .detail-inner.swap{animation:swapIn .22s ease}
   @keyframes swapIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .important-note{
+    background:var(--red);color:var(--white);border-radius:var(--radius-sm);
+    padding:12px 16px;margin-bottom:20px;font-size:13.5px;line-height:1.5;max-width:680px;
+  }
+  .important-note b{font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;margin-right:5px}
   .detail-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap}
   .detail-head .dot{width:10px;height:10px;background:var(--red);flex:0 0 auto;border-radius:50%}
   .detail-head h2{margin:0;font-family:var(--display);text-transform:uppercase;font-size:clamp(24px,4vw,34px);letter-spacing:-.01em}
@@ -367,6 +372,7 @@ const DATA = [
 
   { id:"style", title:"Стиль", tags:["стиль","промпт","подложка","извлечение стиля","llm"],
     desc:"Извлечение и фиксация стиля, работа с промпт-подложкой.",
+    important:" заглушка — здесь появится важное замечание по этапу «Стиль».",
     lessons:[
       {title:"Вводная по работе с промпт-подложкой", people:"Наташа", dur:"? мин"},
       {title:"LLM-извлечение", people:"Дима", dur:"? мин"},
@@ -416,6 +422,7 @@ const DATA = [
 
   { id:"video", title:"Видео", tags:["видео","генерация видео","старт-энд","кадры","kling","seedance","omni"],
     desc:"Оживление кадров в видео: старт/энд-кадры, референс-подход, локальные генерации.",
+    important:" заглушка — здесь появится важное замечание по этапу «Видео».",
     lessons:[{title:"Голова в работе между составной референсов и старт/энд-кадров", people:"Дима", dur:"? мин"}],
     tools:{
       t1:[["Start / End"],["KLING 3"],["Seedance 2.0"]],
@@ -654,7 +661,10 @@ function selectStage(id, opts){
     ? tierBlock('Основные','t1',s.tools.t1)+tierBlock('Дополнительные','t2',s.tools.t2)+tierBlock('Ситуативные','t3',s.tools.t3)
     : `<div class="empty-note">Инструменты по этому этапу пока не заведены</div>`;
 
+  const importantHtml = s.important ? `<div class="important-note"><b>Важно:</b>${s.important}</div>` : '';
+
   detailInner.innerHTML = `
+    ${importantHtml}
     <div class="detail-head"><span class="dot"></span><h2>${s.title}</h2></div>
     <p class="detail-desc">${s.desc}</p>
     <div class="cols">
