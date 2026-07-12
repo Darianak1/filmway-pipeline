@@ -182,8 +182,8 @@
   .empty-note{color:var(--ink);opacity:.5;font-size:13px;font-style:italic;padding:6px 0}
 
   /* tools by tier */
-  .tier{margin-bottom:20px}
-  .tier-label{margin-bottom:10px}
+  .tier{margin-bottom:20px;text-align:center}
+  .tier-label{margin-bottom:12px}
   .tier-label .badge{
     font-family:var(--mono);font-size:10px;padding:3px 9px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;
     display:inline-block;border-radius:999px;
@@ -191,11 +191,11 @@
   .badge.t1{background:var(--red);color:var(--white)}
   .badge.t2{background:transparent;color:var(--ink);border:1px solid var(--ink)}
   .badge.t3{background:transparent;color:var(--ink);opacity:.55;border:1px dashed var(--ink)}
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chips{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
   .chip{
-    cursor:pointer;padding:9px 13px;font-family:var(--mono);font-size:12.5px;font-weight:500;
+    cursor:pointer;padding:13px 20px;font-family:var(--mono);font-size:15px;font-weight:500;
     background:var(--white);border:1px solid var(--ink);color:var(--ink);transition:background .12s,color .12s;
-    display:inline-flex;align-items:center;gap:8px;border-radius:var(--radius-sm);
+    display:inline-flex;align-items:center;gap:9px;border-radius:var(--radius-sm);
   }
   .chip:hover{background:var(--red);border-color:var(--red);color:var(--white)}
   .chip .arrow{opacity:.5;font-size:11px}
