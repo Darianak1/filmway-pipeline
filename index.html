@@ -138,7 +138,10 @@
     background:var(--red);color:var(--white);border-radius:var(--radius-sm);
     padding:16px 20px;margin-bottom:20px;font-size:15px;line-height:1.6;
   }
-  .important-note b{font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;margin-right:6px;display:inline-block}
+  .important-note b{font-family:var(--mono);text-transform:uppercase;letter-spacing:.08em;display:block;margin-bottom:8px}
+  .important-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+  .important-list li{padding-left:18px;position:relative}
+  .important-list li::before{content:"—";position:absolute;left:0;opacity:.75}
   .detail-head{display:flex;align-items:baseline;gap:12px;margin-bottom:6px;flex-wrap:wrap}
   .detail-head .dot{width:10px;height:10px;background:var(--red);flex:0 0 auto;border-radius:50%}
   .detail-head h2{margin:0;font-family:var(--display);text-transform:uppercase;font-size:clamp(24px,4vw,34px);letter-spacing:-.01em}
@@ -350,7 +353,11 @@
 const DATA = [
   { id:"tests", title:"Тесты", tags:["тест","проба","эксперимент"],
     desc:"Пробные прогоны и проверка подходов. Этап в проработке.",
-    important:" Мы делаем видеотесты в 720. Если позволяет время — генерим в Seedance 2.0 через Runway в режиме unlimited (но его скоро закроют). Фотогенерации начинаем с NANO BANANA LITE, чтобы отработать промпт, но для генерации финального стиля всё равно генерим в PRO.",
+    important:[
+      "Мы делаем видеотесты в 720.",
+      "Если позволяет время — генерим в Seedance 2.0 через Runway в режиме unlimited (но его скоро закроют).",
+      "Фотогенерации начинаем с NANO BANANA LITE, чтобы отработать промпт, но для генерации финального стиля всё равно генерим в PRO."
+    ],
     lessons:[], tools:{t1:[["NANO BANANA LITE"]],t2:[],t3:[]} },
 
   { id:"refs", title:"Сбор референсов", tags:["референсы","reference","насмотренность","кадры","mood"],
@@ -662,7 +669,11 @@ function selectStage(id, opts){
     ? tierBlock('Основные','t1',s.tools.t1)+tierBlock('Дополнительные','t2',s.tools.t2)+tierBlock('Ситуативные','t3',s.tools.t3)
     : `<div class="empty-note">Инструменты по этому этапу пока не заведены</div>`;
 
-  const importantHtml = s.important ? `<div class="important-note"><b>Важно:</b>${s.important}</div>` : '';
+  const importantHtml = s.important
+    ? `<div class="important-note"><b>Важно</b><ul class="important-list">${
+        (Array.isArray(s.important) ? s.important : [s.important]).map(x=>`<li>${x}</li>`).join('')
+      }</ul></div>`
+    : '';
 
   detailInner.innerHTML = `
     ${importantHtml}
