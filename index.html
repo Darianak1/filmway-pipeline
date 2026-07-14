@@ -279,6 +279,18 @@
   }
   .foot-note .fn-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--red);font-weight:700;opacity:1;display:block;margin-bottom:8px}
 
+  /* ============ QUICK LINKS TABLE (paper) ============ */
+  .quick-links{max-width:1400px;margin:0 auto;padding:0 clamp(18px,4vw,56px) 28px}
+  .ql-kicker{font-family:var(--mono);font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--red);font-weight:700;display:block;margin-bottom:14px}
+  .ql-table-wrap{overflow-x:auto;border:1px solid var(--black);border-radius:var(--radius-sm);background:var(--white)}
+  .ql-table{width:100%;border-collapse:collapse;font-size:13px;white-space:nowrap}
+  .ql-table th{text-align:left;font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-dark);padding:10px 16px;border-bottom:1px solid var(--black)}
+  .ql-table td{padding:10px 16px;border-bottom:1px solid rgba(17,17,17,.12);color:var(--ink);white-space:normal}
+  .ql-table tr:last-child td{border-bottom:none}
+  .ql-table td:first-child{font-family:var(--mono);color:var(--gray-dark)}
+  .ql-table a{color:var(--red);text-decoration:none}
+  .ql-table a:hover{text-decoration:underline}
+
   /* ============ FOOTER (black) ============ */
   .footer-bar{
     display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;
@@ -345,6 +357,32 @@
     <div class="foot-note">
       <span class="fn-kicker">Это болванка</span>
       Контент — заглушки и то, что считалось с доски. Тиры инструментов расставлены наугад, уроки-видео пока пустые окошки. Всё правится: реальные описания, приоритеты, ссылки на видео и умный поиск подключатся на следующем шаге.
+    </div>
+    <div class="quick-links">
+      <span class="ql-kicker">Быстрые ссылки</span>
+      <div class="ql-table-wrap">
+        <table class="ql-table">
+          <thead>
+            <tr><th>#</th><th>Инструмент</th><th>Ссылка</th><th>Доступ</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>1</td><td>Magnific (Freepic)</td><td><a href="https://www.magnific.com/app" target="_blank" rel="noopener noreferrer">magnific.com/app</a></td><td>Alexander (Зарщиков)<br>Filmway 2</td></tr>
+            <tr><td>2</td><td>Higgsfield</td><td><a href="https://higgsfield.ai/ai-image" target="_blank" rel="noopener noreferrer">higgsfield.ai/ai-image</a></td><td>Alexander (Зарщиков)<br>Filmway 1<br>Filmway 2</td></tr>
+            <tr><td>3</td><td>Flora</td><td><a href="https://flora.ai/" target="_blank" rel="noopener noreferrer">flora.ai</a></td><td>—</td></tr>
+            <tr><td>4</td><td>Krea</td><td><a href="https://www.krea.ai/" target="_blank" rel="noopener noreferrer">krea.ai</a></td><td>—</td></tr>
+            <tr><td>5</td><td>Weavy</td><td><a href="https://weave.figma.com/" target="_blank" rel="noopener noreferrer">weave.figma.com</a></td><td>Alexander (Зарщиков)</td></tr>
+            <tr><td>6</td><td>Syntx</td><td><a href="https://syntx.ai/ru" target="_blank" rel="noopener noreferrer">syntx.ai/ru</a></td><td>—</td></tr>
+            <tr><td>7</td><td>Midjourney</td><td><a href="https://www.midjourney.com/home" target="_blank" rel="noopener noreferrer">midjourney.com</a></td><td>Alexander (Зарщиков)<br>Filmway 2</td></tr>
+            <tr><td>8</td><td>Reve</td><td><a href="https://app.reve.com/" target="_blank" rel="noopener noreferrer">app.reve.com</a></td><td>—</td></tr>
+            <tr><td>9</td><td>Beeble</td><td><a href="https://app.beeble.ai/" target="_blank" rel="noopener noreferrer">app.beeble.ai</a></td><td>Filmway 1</td></tr>
+            <tr><td>10</td><td>Google Flow</td><td><a href="https://labs.google/fx/tools/flow" target="_blank" rel="noopener noreferrer">labs.google/fx/tools/flow</a></td><td>—</td></tr>
+            <tr><td>11</td><td>Runway</td><td><a href="https://runwayml.com/" target="_blank" rel="noopener noreferrer">runwayml.com</a></td><td>Alexander (Зарщиков)</td></tr>
+            <tr><td>12</td><td>Kling</td><td><a href="https://kling.ai/app" target="_blank" rel="noopener noreferrer">kling.ai/app</a></td><td>Filmway 1</td></tr>
+            <tr><td>13</td><td>Sjinn</td><td><a href="https://sjinn.ai/tools/seedance20-video?id=seedance20-video" target="_blank" rel="noopener noreferrer">sjinn.ai/tools/seedance20-video</a></td><td>—</td></tr>
+            <tr><td>14</td><td>HeyGen</td><td><a href="https://www.heygen.com/sv-se" target="_blank" rel="noopener noreferrer">heygen.com/sv-se</a></td><td>Alexander (Зарщиков)</td></tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 
