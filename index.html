@@ -142,6 +142,10 @@
   .important-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
   .important-list li{padding-left:18px;position:relative;color:var(--ink)}
   .important-list li::before{content:"—";position:absolute;left:0;color:var(--red)}
+  .important-group{list-style:none;margin:10px 0 0;padding:0 0 0 16px;display:flex;flex-direction:column;gap:10px;border-left:2px solid var(--red)}
+  .important-group li{padding-left:0}
+  .important-group li::before{content:none}
+  .ig-num{display:inline-block;font-family:var(--mono);font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--red);text-transform:uppercase;margin-right:8px}
   .detail-head{display:flex;align-items:center;gap:12px;margin-bottom:6px;flex-wrap:wrap}
   .detail-head .dot{width:10px;height:10px;background:var(--red);flex:0 0 auto;border-radius:50%}
   .detail-head h2{margin:0;font-family:var(--display);text-transform:uppercase;font-size:clamp(24px,4vw,34px);letter-spacing:-.01em}
@@ -437,10 +441,13 @@ const DATA = [
     desc:"Извлечение и фиксация стиля, работа с промпт-подложкой.",
     important:[
       "На каждом проекте должен быть мастер-стиль (референсы по свету/цвету, камере).",
-      "Есть три способа сохранять консистентность проекта по стилю.",
-      "Промпт-подложка — текстовый блок, созданный через LLM-извлечение (movie extractor), лежит под каждым промптом в каждой генерации и описывает цвет, свет, камеру, объективы, шум и пластику кадра.",
-      "Мастер-референсы — несколько картинок с референсом цвета и света, которые тоже прилагаются к каждой генерации.",
-      "В CINEMA-режимах Higgsfield и Magnific — выставлять одни и те же камеры и объективы при каждой генерации.",
+      "Есть три способа сохранять консистентность проекта по стилю:",
+      { group:[
+          "Промпт-подложка — текстовый блок, созданный через LLM-извлечение (movie extractor), лежит под каждым промптом в каждой генерации и описывает цвет, свет, камеру, объективы, шум и пластику кадра.",
+          "Мастер-референсы — несколько картинок с референсом цвета и света, которые тоже прилагаются к каждой генерации.",
+          "В CINEMA-режимах Higgsfield и Magnific — выставлять одни и те же камеры и объективы при каждой генерации."
+        ]
+      },
       "Все три подхода можно комбинировать."
     ],
     tips:[
@@ -835,7 +842,14 @@ function selectStage(id, opts){
 
   const importantHtml = s.important
     ? `<div class="important-note"><b>Важно</b><ul class="important-list">${
-        (Array.isArray(s.important) ? s.important : [s.important]).map(x=>`<li>${x}</li>`).join('')
+        (Array.isArray(s.important) ? s.important : [s.important]).map(x=>{
+          if(x && typeof x==='object' && x.group){
+            return `<li><ul class="important-group">${
+              x.group.map((g,i)=>`<li><span class="ig-num">Способ ${i+1}</span>${g}</li>`).join('')
+            }</ul></li>`;
+          }
+          return `<li>${x}</li>`;
+        }).join('')
       }</ul></div>`
     : '';
 
