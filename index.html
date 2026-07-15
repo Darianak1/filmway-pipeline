@@ -556,10 +556,11 @@ const DATA = [
       {title:"Работа в Midjourney", people:"Мартин / Кирилл", dur:"? мин"},
       {title:"Нодовые системы (общая)", people:"Дима", dur:"? мин"}
     ],
+    tierLabels:{t1:"Модели", t2:"Инструменты", t3:"Дополнительная модель"},
     tools:{
-      t1:[["Photoshop + нейросети"]],
-      t2:[["REVE 2"]],
-      t3:[["GPT"]]
+      t1:[["Midjourney"],["CINEMA режимы"]],
+      t2:[["LLM-извлечение"],["Референсные кадры"]],
+      t3:[["RECRAFT"]]
     } },
 
   { id:"enhance", title:"Энханс · ретушь", tags:["энханс","ретушь","кожа","порт","локальные правки","фотошоп","skin"],
@@ -668,7 +669,7 @@ const TOOL_INFO = {
     lead:"Наша основная универсальная рабочая модель, первая в тир-листе (Cinema — это тоже banana) — одинаково хороша и для первичных генераций, и для редактуры.",
     pro:[
       "Родненький",
-      "Хорош для локальных правок, не искажает картинку",
+      "Не искажает пропорции картинки, повторяет кадр пиксель в пиксель",
       "Обучен на чудовищном количестве параметров, лучше всех понимает контекст, знает всё, даже Чебурашку!",
       "Есть в Photoshop",
       "Есть в безлимитах",
@@ -836,8 +837,9 @@ function selectStage(id, opts){
       </div>`;}).join('')}</div>`
     : `<div class="empty-note">Уроков по этому этапу пока нет</div>`;
 
+  const tierLabels = s.tierLabels || {};
   const toolsHtml = (s.tools.t1.length+s.tools.t2.length+s.tools.t3.length)
-    ? tierBlock('Основные','t1',s.tools.t1)+tierBlock('Дополнительные','t2',s.tools.t2)+tierBlock('Ситуативные','t3',s.tools.t3)
+    ? tierBlock(tierLabels.t1||'Основные','t1',s.tools.t1)+tierBlock(tierLabels.t2||'Дополнительные','t2',s.tools.t2)+tierBlock(tierLabels.t3||'Ситуативные','t3',s.tools.t3)
     : `<div class="empty-note">Инструменты по этому этапу пока не заведены</div>`;
 
   const importantHtml = s.important
