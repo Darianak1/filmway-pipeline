@@ -263,6 +263,16 @@
   .tips h4{margin:0 0 8px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700}
   .tips p{margin:0;font-size:13px;line-height:1.6;color:rgba(255,255,255,.8)}
 
+  /* lesson summary / timecodes (video modal) */
+  .lesson-extra{margin-top:20px}
+  .lesson-extra h4{margin:0 0 10px;font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:700}
+  .lesson-extra p{margin:0;font-size:13.5px;line-height:1.65;color:rgba(255,255,255,.85)}
+  .tc-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:2px}
+  .tc-list li{display:flex;gap:14px;padding:9px 10px;margin:0 -10px;cursor:pointer;border-radius:var(--radius-sm);transition:background .12s}
+  .tc-list li:hover{background:rgba(255,255,255,.08)}
+  .tc-time{font-family:var(--mono);font-size:11.5px;color:var(--red);flex:0 0 auto;white-space:nowrap}
+  .tc-topic{font-size:13px;line-height:1.5;color:rgba(255,255,255,.85)}
+
   /* video mock */
   .video-mock{background:#000;border:1px solid rgba(255,255,255,.2);aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;position:relative;margin-bottom:16px;border-radius:var(--radius-sm);overflow:hidden}
   .video-embed{background:#000;aspect-ratio:16/9;position:relative;border-radius:var(--radius-sm);overflow:hidden}
@@ -438,7 +448,21 @@ const DATA = [
       "Локации лучше всего создавать в Elements в Magnific."
     ],
     lessons:[
-      {title:"LLM-извлечение и промпт-подложка", people:"Дима", dur:"14 мин", video:"xhV1NtUcHBzy9fyEyoz38j"},
+      {title:"LLM-извлечение и промпт-подложка", people:"Дима", dur:"14 мин", video:"xhV1NtUcHBzy9fyEyoz38j",
+        summary:"Видео раскрывает концепцию промт-подложки (LLM-извлечения стиля) — метод создания визуально единого стиля в генерации изображений и видео. Суть: из референсного кадра (лучше со скрина Shotdeck, где есть метаданные и грейд) с помощью LLM извлекается структурированный стилевой промпт по блокам — цвет и грейд, свет, камера и оптика, глубина резкости, текстура/зерно, атмосфера. Этот стилевой промпт («подложка») подставляется под любое смысловое описание сцены («верхний промпт»), благодаря чему разные генерации выглядят как кадры из одного фильма — с единой цветокоррекцией и светом. Разбираются подводные камни (блоки света и атмосферы часто «тянут» лишние детали из референса), лайфхаки (герои на сером фоне) и области применения — от кинематографичных кадров до иллюстраций в едином стиле и «оживления» старых фото под плёнку.",
+        timecodes:[
+          {t:"00:00–01:13", sec:0, topic:"Что такое промт-подложка: скрин из Shotdeck как источник кадра, палитры и метаданных"},
+          {t:"00:46–01:38", sec:46, topic:"Структура промпта для LLM-извлечения стиля (блоки: цвет/грейд, свет, камера/оптика, ГРИП, текстура, атмосфера)"},
+          {t:"02:00–02:46", sec:120, topic:"Альтернативный способ извлечения — через нодовую систему/агрегатор без отдельной LLM"},
+          {t:"02:46–04:39", sec:166, topic:"Как использовать подложку: разделение промпта на «верхний» (описание сцены) и «нижний» (стиль); демонстрация на NANO BANANA LITE и PRO"},
+          {t:"04:39–06:41", sec:279, topic:"Приближение к оригиналу через style-reference: как подключить референс и ограничить, что нейросеть не должна с него «снимать» (одежда, объекты)"},
+          {t:"06:41–08:52", sec:401, topic:"Осторожные блоки: свет (тянет лишние источники света, например окна) и атмосфера (тянет посторонние предметы, например бутылки) — когда их лучше удалять"},
+          {t:"09:19–10:06", sec:559, topic:"Лайфхак: почему персонажей нужно генерировать на сером фоне (иначе референс окружения влияет на итоговый свет/цвет)"},
+          {t:"10:06–10:49", sec:606, topic:"Ограничения метода: сцены со специфическим источником света (например свечи) плохо поддаются корректировке"},
+          {t:"10:49–11:39", sec:649, topic:"Когда метод не нужен: если в ролике много разных сцен/локаций — vs когда это must-have: если сцена/освещение единое на протяжении ролика"},
+          {t:"12:01–13:39", sec:721, topic:"Другие применения подложки: единый иллюстративный стиль под разные эпохи (мазки, тоновые переходы вместо камеры/оптики)"},
+          {t:"13:39–14:57", sec:819, topic:"Кейс «оживления» старых фото: промт-подложка для плёночного стиля (шум, зерно), верхний промпт — только про движение/действие в кадре"}
+        ]},
       {title:"Мастер стиль", people:"Дима", dur:"2 мин", video:"gVedeFV1muEdgDG1kusCMe"}
     ],
     tools:{
@@ -762,7 +786,7 @@ function selectStage(id, opts){
         return `
       <div class="lesson${on?' watched':''}">
         <button class="watch-toggle${on?' on':''}" title="Отметить просмотренным" aria-pressed="${on}" onclick="onToggleWatch(event,'${s.id}',${idx})">✓</button>
-        <div class="l-main" tabindex="0" role="button" aria-label="Открыть видео-урок ${l.title}" onclick="openVideo('${l.title.replace(/'/g,"\\'")}','${l.people.replace(/'/g,"\\'")}','${l.video||''}')">
+        <div class="l-main" tabindex="0" role="button" aria-label="Открыть видео-урок ${l.title}" onclick="openLessonVideo('${s.id}',${idx})">
           <div class="play"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5v14l12-7z"/></svg></div>
           <div class="l-body">
             <div class="l-title">${l.title}</div>
@@ -939,7 +963,21 @@ function openTips(stageId){
     </div>`);
 }
 
-function openVideo(title,people,videoId,seek){
+function openLessonVideo(stageId, idx){
+  const s = DATA.find(x=>x.id===stageId);
+  const l = s && s.lessons[idx];
+  if(!l) return;
+  openVideo(l.title, l.people, l.video||'', 0, l);
+}
+
+function seekLessonVideo(sec){
+  const iframe = document.querySelector('.video-embed iframe');
+  if(!iframe) return;
+  const base = iframe.src.split('?')[0];
+  iframe.src = `${base}?seek=${Math.round(sec)}&autoplay=1`;
+}
+
+function openVideo(title,people,videoId,seek,lesson){
   const src = seek
     ? `https://kinescope.io/embed/${videoId}?seek=${Math.round(seek)}&autoplay=1`
     : `https://kinescope.io/embed/${videoId}`;
@@ -949,6 +987,16 @@ function openVideo(title,people,videoId,seek){
         <div class="pbtn"><svg width="22" height="22" viewBox="0 0 24 24" fill="#111"><path d="M8 5v14l11-7z"/></svg></div>
       </div>
       <p class="video-caption">Здесь будет встроенный видео-урок — открыл и смотришь, без ухода по ссылкам.</p>`;
+
+  const summaryHtml = lesson && lesson.summary
+    ? `<div class="lesson-extra"><h4>Краткое саммари</h4><p>${lesson.summary}</p></div>`
+    : '';
+  const timecodesHtml = lesson && lesson.timecodes && lesson.timecodes.length
+    ? `<div class="lesson-extra"><h4>Таймкоды по темам</h4><ul class="tc-list">${
+        lesson.timecodes.map(tc=>`<li onclick="seekLessonVideo(${tc.sec})"><span class="tc-time">${tc.t}</span><span class="tc-topic">${tc.topic}</span></li>`).join('')
+      }</ul></div>`
+    : '';
+
   openModalShell(`
     <div class="modal-head">
       <div class="m-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M7 5v14l12-7z"/></svg></div>
@@ -960,6 +1008,8 @@ function openVideo(title,people,videoId,seek){
     </div>
     <div class="modal-body">
       ${player}
+      ${summaryHtml}
+      ${timecodesHtml}
     </div>`);
 }
 
@@ -1024,7 +1074,7 @@ function openAnswerVideo(stageId, lessonIdx, seek){
   const s = DATA.find(x=>x.id===stageId);
   const l = s && s.lessons[lessonIdx];
   if(!l) return;
-  openVideo(l.title, l.people, l.video||'', seek);
+  openVideo(l.title, l.people, l.video||'', seek, l);
 }
 
 const search = document.getElementById('search');
