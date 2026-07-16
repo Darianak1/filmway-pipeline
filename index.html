@@ -266,6 +266,9 @@
   .tips{border-left:2px solid var(--red);padding:4px 0 4px 16px}
   .tips h4{margin:0 0 8px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--red);font-weight:700}
   .tips p{margin:0;font-size:13px;line-height:1.6;color:rgba(255,255,255,.8)}
+  .prompt-box{border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-sm);padding:14px;margin-top:16px;background:rgba(255,255,255,.03)}
+  .prompt-box h4{margin:0 0 10px;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--red)}
+  .prompt-box pre{margin:0;font-family:var(--mono);font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.85);white-space:pre-wrap;word-break:break-word}
 
   /* lesson summary / timecodes (video modal) */
   .lesson-extra{margin-top:20px}
@@ -891,6 +894,18 @@ const TOOL_INFO = {
     ],
     tips:"Эта модель пока бесполезна для базовых генераций, пока к ней не прикрутят референсы, но может быть очень полезна как «нулевая» генерация — для создания персонажей, локаций, атмосферы и прочего, как последующий реф для NANO BANANA."
   },
+  "LLM-извлечение": {
+    lead:"Извлечение стиля через LLM — базовый промпт для извлечения стиля из картинки: берёшь скрин из фильма/рекламы, закидываешь в LLM (лучше Claude) вместе с этим промптом и получаешь на выходе промпт стиля (промпт-подложку).",
+    pro:[
+      "Промпт написан так, чтобы забрать только элементы стиля, не забирая композицию, героев, костюмы, интерьер и т.д."
+    ],
+    con:[],
+    tips:"Больше инфы по этой механике — в приложенном видео.",
+    promptBox:{
+      title:"STYLE EXTRACTOR",
+      text:"You are a cinematic style analysis tool. I will attach a frame from Shotdeck. Your task is to analyze the image and its metadata and output a structured style prompt in English with the following blocks: COLOR AND GRADE, LIGHTING, CAMERA AND OPTICS, DEPTH OF FIELD, GRAIN AND TEXTURE, ATMOSPHERE AND PLASTICITY\n\nПо необходимости можно добавить “SKIN TONE”, если важно передать цвет кожи."
+    }
+  },
   "SHOTDECK": {
     lead:"Лучшая кинобаза — главный инструмент по кино-референсам в нашем пайплайне.",
     pro:["Отлично подходит для работы с movie extractor","Отличный набор фильтров","Есть все необходимые метаданные фильма"],
@@ -1258,6 +1273,7 @@ function openTool(name){
         <div class="pm-box con"><h4>Минусы</h4><ul>${d.con.map(x=>`<li>${x}</li>`).join('')}</ul></div>
       </div>
       <div class="tips"><h4>Совет команды</h4><p>${d.tips}</p></div>
+      ${d.promptBox ? `<div class="prompt-box"><h4>${d.promptBox.title}</h4><pre>${d.promptBox.text}</pre></div>` : ''}
     </div>`);
 }
 
