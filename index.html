@@ -906,6 +906,16 @@ const TOOL_INFO = {
       text:"You are a cinematic style analysis tool. I will attach a frame from Shotdeck. Your task is to analyze the image and its metadata and output a structured style prompt in English with the following blocks: COLOR AND GRADE, LIGHTING, CAMERA AND OPTICS, DEPTH OF FIELD, GRAIN AND TEXTURE, ATMOSPHERE AND PLASTICITY\n\nПо необходимости можно добавить “SKIN TONE”, если важно передать цвет кожи."
     }
   },
+  "Референсные кадры": {
+    lead:"Извлечение стиля через референс — если во время генерации вы подкидываете ещё и референсное изображение, нужно добавить приписку со ссылкой на это изображение. Приписка говорит забирать из референса только стиль, игнорируя персонажей, одежду и т.д.",
+    pro:[],
+    con:[],
+    tips:"Больше инфы по этой механике — в приложенном видео.",
+    promptBox:{
+      title:"REFERENCE-ONLY STYLE",
+      text:"Use the attached image solely as a visual style reference. Extract from it the color palette, lighting character, optics, grain and overall cinematic atmosphere. Do not transfer to the generation the appearance of the character, clothing, composition or scene content. Do not describe the character, clothing, pose, shot size or composition. Do not ask clarifying questions — output the result immediately."
+    }
+  },
   "SHOTDECK": {
     lead:"Лучшая кинобаза — главный инструмент по кино-референсам в нашем пайплайне.",
     pro:["Отлично подходит для работы с movie extractor","Отличный набор фильтров","Есть все необходимые метаданные фильма"],
