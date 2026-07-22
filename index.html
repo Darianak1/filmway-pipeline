@@ -46,6 +46,18 @@
   .logo{font-family:var(--display);font-size:16px;letter-spacing:.05em;text-transform:uppercase;color:var(--white)}
   .logo .ai{font-family:var(--script);color:var(--red);font-size:20px;margin-left:6px}
   .topbar .kicker-r{font-family:var(--mono);font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gray-dark)}
+  .top-nav{display:flex;gap:6px}
+  .top-nav button{
+    background:transparent;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.7);
+    font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    padding:7px 14px;border-radius:var(--radius-sm);cursor:pointer;
+  }
+  .top-nav button.active{background:var(--red);border-color:var(--red);color:var(--white)}
+  .top-nav button:hover:not(.active){border-color:var(--red)}
+  .podelezhki-view{display:none;padding:32px clamp(18px,4vw,56px);max-width:900px;margin:0 auto}
+  .podelezhki-view h2{font-family:var(--display);font-size:clamp(24px,4vw,34px);text-transform:uppercase;margin:0 0 18px}
+  .podelezhki-view ul{margin:0;padding-left:20px;font-family:var(--body);font-size:14.5px;line-height:1.7;color:rgba(255,255,255,.85)}
+  .podelezhki-view p{font-family:var(--body);font-size:14.5px;line-height:1.7;color:rgba(255,255,255,.7)}
 
   /* ============ HERO (red) ============ */
   .hero{
@@ -403,9 +415,19 @@
 
   <div class="topbar">
     <div class="logo">FILMWAY<span class="ai">ai</span></div>
+    <div class="top-nav">
+      <button id="navTabPipeline" class="active" onclick="showPipelineView()">Пайплайн</button>
+      <button id="navTabPodelezhki" onclick="showPodelezhkiView()">Подележки</button>
+    </div>
     <div class="kicker-r">/ ПРОДАКШН · БАЗА ЗНАНИЙ</div>
   </div>
 
+  <div class="podelezhki-view" id="podelezhkiView">
+    <h2>Подележки</h2>
+    <p>Раздел в проработке — здесь появится текстовый список.</p>
+  </div>
+
+  <div id="pipelineView">
   <div class="hero">
     <div class="sparkle">✦</div>
     <div class="hero-grid">
@@ -485,6 +507,7 @@
   <div class="footer-bar">
     <div>FILMWAY AI · БАЗА ЗНАНИЙ</div>
     <div>V0.2 · ЧЕРНОВИК</div>
+  </div>
   </div>
 
 <!-- modal -->
@@ -1638,9 +1661,30 @@ search.addEventListener('input',()=>{
   renderAnswers(words);
 });
 
+/* ---------- ВКЛАДКИ (Пайплайн / Подележки) ---------- */
+function showPipelineView(){
+  document.getElementById('pipelineView').style.display = '';
+  document.getElementById('podelezhkiView').style.display = 'none';
+  document.getElementById('navTabPipeline').classList.add('active');
+  document.getElementById('navTabPodelezhki').classList.remove('active');
+  if(location.hash === '#podelezhki') history.pushState(null,'', location.pathname);
+}
+function showPodelezhkiView(){
+  document.getElementById('pipelineView').style.display = 'none';
+  document.getElementById('podelezhkiView').style.display = '';
+  document.getElementById('navTabPipeline').classList.remove('active');
+  document.getElementById('navTabPodelezhki').classList.add('active');
+  if(location.hash !== '#podelezhki') history.pushState(null,'', '#podelezhki');
+}
+
 /* ---------- DEEP-LINK (URL hash) ---------- */
 function applyHashFromUrl(){
   const id = location.hash.replace('#','');
+  if(id === 'podelezhki'){
+    showPodelezhkiView();
+    return;
+  }
+  showPipelineView();
   if(id && DATA.some(x=>x.id===id)){
     suppressHash = true;
     selectStage(id,{updateHash:false});
