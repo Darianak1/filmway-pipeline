@@ -1680,7 +1680,7 @@ function showPipelineView(){
 }
 function showPodelezhkiView(){
   document.getElementById('pipelineView').style.display = 'none';
-  document.getElementById('podelezhkiView').style.display = '';
+  document.getElementById('podelezhkiView').style.display = 'block';
   document.getElementById('navTabPipeline').classList.remove('active');
   document.getElementById('navTabPodelezhki').classList.add('active');
   if(location.hash !== '#podelezhki') history.pushState(null,'', '#podelezhki');
