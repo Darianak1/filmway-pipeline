@@ -1448,23 +1448,26 @@ function loadKinescopeFactory(){
   return kinescopeFactoryPromise;
 }
 
+let currentContainerId = null;
+
 function seekViaIframeReload(sec){
-  const el = document.getElementById('videoEmbedContainer');
+  const el = currentContainerId && document.getElementById(currentContainerId);
   const iframe = el && el.tagName === 'IFRAME' ? el : (el && el.querySelector('iframe'));
   if(iframe && currentVideoId){
     iframe.src = `https://kinescope.io/embed/${currentVideoId}?seek=${Math.round(sec)}&autoplay=1`;
   }
 }
 
-function mountKinescopePlayer(videoId, seek){
-  const requestId = ++videoRequestId;
+function mountKinescopePlayer(videoId, seek, containerId){
+  const requestId = videoRequestId;
   currentKinescopePlayer = null;
   currentVideoId = videoId;
-  const container = document.getElementById('videoEmbedContainer');
+  currentContainerId = containerId;
+  const container = document.getElementById(containerId);
   if(!container) return;
   const fallbackIframe = ()=>{
     if(requestId !== videoRequestId) return; // modal moved on to another video — don't overwrite it
-    const el = document.getElementById('videoEmbedContainer');
+    const el = document.getElementById(containerId);
     if(!el) return;
     const src = seek ? `https://kinescope.io/embed/${videoId}?seek=${Math.round(seek)}&autoplay=1` : `https://kinescope.io/embed/${videoId}`;
     el.innerHTML = `<iframe src="${src}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
@@ -1472,8 +1475,8 @@ function mountKinescopePlayer(videoId, seek){
   loadKinescopeFactory().then(factory=>{
     if(requestId !== videoRequestId) return; // stale — a newer video was opened meanwhile
     if(!factory){ fallbackIframe(); return; }
-    if(!document.getElementById('videoEmbedContainer')) return; // modal closed before API loaded
-    factory.create('videoEmbedContainer', {
+    if(!document.getElementById(containerId)) return; // modal closed before API loaded
+    factory.create(containerId, {
       url:`https://kinescope.io/${videoId}`,
       size:{width:'100%',height:'100%'}
     }).then(player=>{
@@ -1495,8 +1498,10 @@ function seekLessonVideo(sec){
 }
 
 function openVideo(title,people,videoId,seek,lesson){
+  videoRequestId++;
+  const containerId = 'videoEmbedContainer_' + videoRequestId;
   const player = videoId
-    ? `<div class="video-embed"><div id="videoEmbedContainer"></div></div>`
+    ? `<div class="video-embed"><div id="${containerId}"></div></div>`
     : `<div class="video-mock">
         <div class="pbtn"><svg width="22" height="22" viewBox="0 0 24 24" fill="#111"><path d="M8 5v14l11-7z"/></svg></div>
       </div>
@@ -1526,11 +1531,16 @@ function openVideo(title,people,videoId,seek,lesson){
       ${timecodesHtml}
     </div>`);
 
-  if(videoId) mountKinescopePlayer(videoId, seek);
+  if(videoId) mountKinescopePlayer(videoId, seek, containerId);
 }
 
 function closeModal(){
   overlay.classList.remove('show');
+  videoRequestId++; // invalidate any mount/seek still in flight for the video being closed
+  currentKinescopePlayer = null;
+  currentContainerId = null;
+  currentVideoId = null;
+  modal.innerHTML = ''; // detach any playing video/audio iframe immediately, not just hide it
   if(lastFocused && document.contains(lastFocused)) lastFocused.focus();
   lastFocused = null;
 }
