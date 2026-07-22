@@ -119,10 +119,11 @@
   .stage{
     scroll-snap-align:start;flex:0 0 auto;min-width:200px;max-width:250px;cursor:pointer;
     background:var(--black);color:var(--white);border:1px solid rgba(255,255,255,.25);
-    padding:24px 22px;font-family:var(--display);font-size:18px;text-transform:uppercase;
+    padding:24px 22px;font-family:var(--display);font-size:14px;text-transform:uppercase;
     line-height:1.25;position:relative;transition:background .15s,color .15s,border-color .15s;
     text-align:left;border-radius:var(--radius);
   }
+  .stage .stage-title{word-break:break-word;overflow-wrap:anywhere}
   .stage:hover{border-color:var(--red)}
   .stage.active{background:var(--red);border-color:var(--red);color:var(--white)}
   .stage.active .num{color:var(--black)}
