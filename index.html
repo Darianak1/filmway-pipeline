@@ -840,6 +840,27 @@ const ANSWERS = [
     stageId:"enhance",
     lessonIdx:1,
     seek:0
+  },
+  {
+    keywords:["раскадровка","сторибоард","storyboard","серия референсов","несколько кадров"],
+    answer:"Смотри урок «Видео: работа через референсы» — там показано, как собирать сложную сцену через раскадровку из нескольких последовательных кадров вместо разрозненных Start-End генераций.",
+    stageId:"video",
+    lessonIdx:1,
+    seek:73
+  },
+  {
+    keywords:["убрать фон","заменить фон","замена фона","удалить фон","поменять фон"],
+    answer:"Смотри урок «Video to video» — Дима показывает, как заменить фон в видео, сохранив движение объектов и людей.",
+    stageId:"video",
+    lessonIdx:0,
+    seek:249
+  },
+  {
+    keywords:["видео из фото","оживить фото","фото в видео","картинка в видео","image to video"],
+    answer:"Смотри урок «Video to video» — базовый принцип оживления кадра: картиночный референс задаёт стиль и героя, видео-референс — движение и камеру.",
+    stageId:"video",
+    lessonIdx:0,
+    seek:0
   }
 ];
 
@@ -1105,6 +1126,11 @@ function watchedCount(stageId, total){
 
 /* ---------- РЕНДЕР СПАЙНА ---------- */
 const spine = document.getElementById('spine');
+spine.addEventListener('wheel', e=>{
+  if(Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // let native horizontal trackpad swipe through
+  e.preventDefault();
+  spine.scrollLeft += e.deltaY;
+}, { passive:false });
 const detail = document.getElementById('detail');
 const detailInner = document.getElementById('detailInner');
 const progressText = document.getElementById('progressText');
@@ -1385,15 +1411,19 @@ function openLessonVideo(stageId, idx){
 let kinescopeFactoryPromise = null;
 let currentKinescopePlayer = null;
 let currentVideoId = null;
+let videoRequestId = 0;
 
 function loadKinescopeFactory(){
   if(kinescopeFactoryPromise) return kinescopeFactoryPromise;
   kinescopeFactoryPromise = new Promise(resolve=>{
-    window.onKinescopeIframeAPIReady = function(factory){ resolve(factory); };
+    let done = false;
+    const finish = factory => { if(done) return; done = true; resolve(factory); };
+    window.onKinescopeIframeAPIReady = function(factory){ finish(factory); };
     const tag = document.createElement('script');
     tag.src = 'https://player.kinescope.io/latest/iframe.player.js';
-    tag.onerror = ()=>resolve(null);
+    tag.onerror = ()=>finish(null);
     document.head.appendChild(tag);
+    setTimeout(()=>finish(null), 4000); // API script slow/blocked — fall back to plain iframe instead of staying blank forever
   });
   return kinescopeFactoryPromise;
 }
@@ -1407,22 +1437,27 @@ function seekViaIframeReload(sec){
 }
 
 function mountKinescopePlayer(videoId, seek){
+  const requestId = ++videoRequestId;
   currentKinescopePlayer = null;
   currentVideoId = videoId;
   const container = document.getElementById('videoEmbedContainer');
   if(!container) return;
   const fallbackIframe = ()=>{
-    if(!document.getElementById('videoEmbedContainer')) return;
+    if(requestId !== videoRequestId) return; // modal moved on to another video — don't overwrite it
+    const el = document.getElementById('videoEmbedContainer');
+    if(!el) return;
     const src = seek ? `https://kinescope.io/embed/${videoId}?seek=${Math.round(seek)}&autoplay=1` : `https://kinescope.io/embed/${videoId}`;
-    container.innerHTML = `<iframe src="${src}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
+    el.innerHTML = `<iframe src="${src}" allow="autoplay; fullscreen; picture-in-picture; encrypted-media" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>`;
   };
   loadKinescopeFactory().then(factory=>{
+    if(requestId !== videoRequestId) return; // stale — a newer video was opened meanwhile
     if(!factory){ fallbackIframe(); return; }
-    if(!document.getElementById('videoEmbedContainer')) return; // modal closed/changed before API loaded
+    if(!document.getElementById('videoEmbedContainer')) return; // modal closed before API loaded
     factory.create('videoEmbedContainer', {
       url:`https://kinescope.io/${videoId}`,
       size:{width:'100%',height:'100%'}
     }).then(player=>{
+      if(requestId !== videoRequestId) return;
       currentKinescopePlayer = player;
       if(seek) Promise.resolve(player.seekTo(seek)).catch(()=>seekViaIframeReload(seek));
     }).catch(fallbackIframe);
