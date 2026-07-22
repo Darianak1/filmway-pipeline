@@ -1127,9 +1127,9 @@ function watchedCount(stageId, total){
 /* ---------- РЕНДЕР СПАЙНА ---------- */
 const spine = document.getElementById('spine');
 spine.addEventListener('wheel', e=>{
-  if(Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; // let native horizontal trackpad swipe through
+  if(spine.scrollWidth <= spine.clientWidth) return; // nothing to scroll
   e.preventDefault();
-  spine.scrollLeft += e.deltaY;
+  spine.scrollLeft += (e.deltaY !== 0 ? e.deltaY : e.deltaX);
 }, { passive:false });
 const detail = document.getElementById('detail');
 const detailInner = document.getElementById('detailInner');
