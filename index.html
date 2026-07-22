@@ -56,8 +56,11 @@
   .top-nav button:hover:not(.active){border-color:var(--red)}
   .podelezhki-view{display:none;padding:32px clamp(18px,4vw,56px);max-width:900px;margin:0 auto}
   .podelezhki-view h2{font-family:var(--display);font-size:clamp(24px,4vw,34px);text-transform:uppercase;margin:0 0 18px}
-  .podelezhki-view ul{margin:0;padding-left:20px;font-family:var(--body);font-size:14.5px;line-height:1.7;color:rgba(255,255,255,.85)}
   .podelezhki-view p{font-family:var(--body);font-size:14.5px;line-height:1.7;color:rgba(255,255,255,.7)}
+  .podelezhki-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:14px}
+  .podelezhki-list li{border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-sm);padding:14px 18px}
+  .pod-meta{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
+  .pod-title{display:block;font-family:var(--body);font-size:14.5px;line-height:1.55;color:rgba(255,255,255,.9)}
 
   /* ============ HERO (red) ============ */
   .hero{
@@ -424,7 +427,12 @@
 
   <div class="podelezhki-view" id="podelezhkiView">
     <h2>Подележки</h2>
-    <p>Раздел в проработке — здесь появится текстовый список.</p>
+    <ul class="podelezhki-list">
+      <li>
+        <span class="pod-meta">Лера · 21.07.2026</span>
+        <span class="pod-title">Правила работы над всеми нашими проектами — структура Filmway AI</span>
+      </li>
+    </ul>
   </div>
 
   <div id="pipelineView">
