@@ -269,7 +269,11 @@
     border-radius:var(--radius);
   }
   .overlay.show .modal{transform:scale(1) translateY(0)}
+  .overlay.doc-modal .modal{max-width:1100px}
   .modal-drag{display:none}
+  .doc-body{padding:0}
+  .doc-embed{width:100%;height:80vh;border:none;display:block;background:var(--white)}
+  @media(max-width:640px){ .doc-embed{height:70vh} }
   @media(max-width:640px){
     .overlay{align-items:flex-end;padding:0}
     .modal{max-width:100%;max-height:86vh;border-left:none;border-right:none;border-bottom:none;transform:translateY(100%);
@@ -440,7 +444,7 @@
         <span class="pod-meta">Лера · 21.07.2026</span>
         <span class="pod-title">Правила работы над всеми нашими проектами — структура Filmway AI</span>
         <button class="pod-play" onclick="openVideo('Правила работы над всеми нашими проектами — структура Filmway AI','Лера','sp2UpWVL5U7NE2Vc3YerCq',0,null)">▶ Смотреть видео</button>
-        <a class="pod-play pod-doc" href="struktura-filmway-ai.pdf" target="_blank" rel="noopener noreferrer">📄 Презентация</a>
+        <button class="pod-play pod-doc" onclick="openDoc('Структура Filmway AI','struktura-filmway-ai.pdf')">📄 Презентация</button>
       </li>
     </ul>
   </div>
@@ -1584,8 +1588,25 @@ function openVideo(title,people,videoId,seek,lesson){
   if(videoId) mountKinescopePlayer(videoId, seek, containerId);
 }
 
+function openDoc(title, url){
+  overlay.classList.add('doc-modal');
+  openModalShell(`
+    <div class="modal-head">
+      <div class="m-icon">📄</div>
+      <div>
+        <h3 id="modalTitle">${title}</h3>
+        <div class="m-tag">презентация</div>
+      </div>
+      <button class="modal-close" onclick="closeModal()" aria-label="Закрыть">×</button>
+    </div>
+    <div class="modal-body doc-body">
+      <iframe class="doc-embed" src="${url}"></iframe>
+    </div>`);
+}
+
 function closeModal(){
   overlay.classList.remove('show');
+  overlay.classList.remove('doc-modal');
   videoRequestId++; // invalidate any mount/seek still in flight for the video being closed
   currentKinescopePlayer = null;
   currentContainerId = null;
