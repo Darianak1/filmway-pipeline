@@ -1162,10 +1162,9 @@ let suppressHash = false;
 
 function stageMetaHtml(s){
   const nl = s.lessons.length;
-  const nt = s.tools.t1.length+s.tools.t2.length+s.tools.t3.length;
   const wc = watchedCount(s.id, nl);
   const lessonPart = nl ? (wc ? `▶ ${wc}/${nl}` : `▶ ${nl}`) : `▶ 0`;
-  return `<span>${lessonPart}</span><span>⚙ ${nt}</span>`;
+  return `<span>${lessonPart}</span>`;
 }
 
 DATA.forEach((s,i)=>{
