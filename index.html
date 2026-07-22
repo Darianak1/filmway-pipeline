@@ -61,6 +61,12 @@
   .podelezhki-list li{border:1px solid rgba(255,255,255,.2);border-radius:var(--radius-sm);padding:14px 18px}
   .pod-meta{display:block;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--red);margin-bottom:6px}
   .pod-title{display:block;font-family:var(--body);font-size:14.5px;line-height:1.55;color:rgba(255,255,255,.9)}
+  .pod-play{
+    display:inline-flex;align-items:center;gap:6px;margin-top:12px;cursor:pointer;
+    background:var(--red);color:var(--white);border:none;border-radius:999px;padding:7px 15px;
+    font-family:var(--mono);font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;
+  }
+  .pod-play:hover{opacity:.85}
 
   /* ============ HERO (red) ============ */
   .hero{
@@ -431,6 +437,7 @@
       <li>
         <span class="pod-meta">Лера · 21.07.2026</span>
         <span class="pod-title">Правила работы над всеми нашими проектами — структура Filmway AI</span>
+        <button class="pod-play" onclick="openVideo('Правила работы над всеми нашими проектами — структура Filmway AI','Лера','sp2UpWVL5U7NE2Vc3YerCq',0,null)">▶ Смотреть видео</button>
       </li>
     </ul>
   </div>
